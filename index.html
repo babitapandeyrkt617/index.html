@@ -1,0 +1,88 @@
+
+<!-- These comments will help you in understanding the code.
+You can do the same thing with Python also.
+But I have told with JavaScript. -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Table to Excel</title>
+        <!-- Include xlsx library for Excel file manipulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Static Table</h1>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Example Title 1</td>
+                <td>Example Content 1</td>
+            </tr>
+            <tr>
+                <td>Example Title 2</td>
+                <td>Example Content 2</td>
+            </tr>
+            <tr>
+                <td>Example Title 3</td>
+                <td>Example Content 3</td>
+            </tr>
+            <tr>
+                <td>Example Title 4</td>
+                <td>Example Content 4</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to generate and download Excel file
+            function generateExcel() {
+                // Get the table element by its ID
+                const table = document.getElementById('dataTable');
+                // Select all rows within the table
+                const rows = table.querySelectorAll('tr');
+                // Create a new workbook object using xlsx library
+                let workbook = XLSX.utils.book_new();
+                // Initialize an array to store worksheet data
+                let worksheet_data = [];
+    
+                // Iterate over each row in the table
+                rows.forEach(row => {
+                    // Initialize an array to store data of current row
+                    let rowData = [];
+                    // Select all cells (th, td) within the current row
+                    row.querySelectorAll('th, td').forEach(cell => {
+                        // Push the inner text of each cell into the rowData array
+                        rowData.push(cell.innerText);
+                    });
+                    // Push the completed rowData array into the worksheet_data array
+                    worksheet_data.push(rowData);
+                });
+    
+                // Convert the worksheet_data array to a worksheet object
+                let worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
+                // Append the worksheet to the workbook with a specified name
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Table Data");
+                // Write the workbook to an Excel file and initiate file download
+                XLSX.writeFile(workbook, 'table_data.xlsx');
+            }
+    
+            // Call the generateExcel function when the DOM content is fully loaded
+            generateExcel();
+        });
+    </script>
+    
+</body>
+</html>
